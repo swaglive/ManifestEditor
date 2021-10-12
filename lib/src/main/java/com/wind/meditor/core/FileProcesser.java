@@ -53,7 +53,12 @@ public class FileProcesser {
                     ZipEntry zosEntry = new ZipEntry(entry.getName());
                     zosEntry.setComment(entry.getComment());
                     zosEntry.setExtra(entry.getExtra());
-
+                    //Andorid API LEVEL 30+ requires some files remaining uncompressed
+                    if (entry.getMethod() == ZipEntry.STORED) {
+                        zosEntry.setMethod(entry.getMethod());
+                        zosEntry.setSize(entry.getSize());
+                        zosEntry.setCrc(entry.getCrc());
+                    }
                     zipOutputStream.putNextEntry(zosEntry);
                     if ("AndroidManifest.xml".equals(zipEntryName)) {
                         // if it is manifest file, modify it.
